@@ -4,3 +4,6 @@ __pycache__/
 venv/
 
 *.zip
+data/preprocessed/
+data/preprocessed_1m/
+ml-1m/
