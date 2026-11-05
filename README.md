@@ -63,7 +63,7 @@ User Data
 ```
 term_project/
 ├── data/
-│   ├── raw/                 # Raw MovieLens 100k files (u.data, u.item, u.user) - not committed
+│   ├── raw/                 # Raw MovieLens 100k files (included in the repo)
 │   ├── preprocessed/        # Cleaned 100k datasets - generated, not committed
 │   └── preprocessed_1m/     # Cleaned 1M datasets - generated, not committed
 ├── ml-1m/                   # Raw MovieLens 1M files (ratings.dat, movies.dat, users.dat) - not committed
@@ -146,15 +146,15 @@ The exact same artifact schema is produced for both datasets (`data/preprocessed
 ## 7. Getting Started
 
 ### 0) Prepare raw data
-Download from [GroupLens](https://grouplens.org/datasets/movielens/) and place the files as follows (raw data and generated results are not committed):
-- 100k: copy `u.data`, `u.item`, `u.user` into `data/raw/`
-- 1M: unzip `ml-1m.zip` so that `ml-1m/ratings.dat`, `movies.dat`, `users.dat` exist at the project root
+- 100k: already included in `data/raw/` (nothing to do).
+- 1M: not included because of its size. Download `ml-1m.zip` from [GroupLens](https://grouplens.org/datasets/movielens/1m/) and unzip it so that `ml-1m/ratings.dat`, `movies.dat`, `users.dat` exist at the project root.
+- Generated results (`data/preprocessed/`, `data/preprocessed_1m/`) are not committed; each member creates them by running the scripts below.
 
 ### 1) Run Preprocessing (100k)
 ```bash
 python preprocess.py
 ```
-Outputs go to `data/preprocessed/`. If `data/raw/` does not exist, the script falls back to reading `data/ml-100k` and writing to `processed/`, so create `data/raw/` first to keep the paths used by the model code.
+Reads `data/raw/` and writes to `data/preprocessed/`. (If `data/raw/` is missing, the script falls back to `data/ml-100k` and `processed/`, which the model code does not expect.)
 
 ### 2) Run Preprocessing (1M Scale-Up)
 ```bash
