@@ -63,20 +63,18 @@ User Data
 ```
 term_project/
 ├── data/
-│   ├── raw/                 # Raw MovieLens 100k files
-│   ├── preprocessed/        # Cleaned 100k datasets
-│   ├── preprocessed_1m/     # Cleaned 1M datasets
-│   ├── preprocessing.py     # 100k preprocessing pipeline
-│   └── preprocessing_1m.py  # 1M preprocessing pipeline
-├── ml-1m/                   # Raw MovieLens 1M files (ratings.dat, movies.dat, etc.)
+│   ├── raw/                 # Raw MovieLens 100k files (u.data, u.item, u.user) - not committed
+│   ├── preprocessed/        # Cleaned 100k datasets - generated, not committed
+│   └── preprocessed_1m/     # Cleaned 1M datasets - generated, not committed
+├── ml-1m/                   # Raw MovieLens 1M files (ratings.dat, movies.dat, users.dat) - not committed
 ├── models/
 │   ├── content_based.py     # Content-based recommendation module (TF-IDF)
 │   └── model_based.py       # Collaborative filtering module (SVD / MF)
 ├── plots/
 │   ├── eda_overview.png     # 100k EDA distribution plots
 │   └── eda_overview_1m.png  # 1M EDA distribution plots
-├── preprocess.py            # Root runner for 100k
-├── preprocess_1m.py         # Root runner for 1M
+├── preprocess.py            # 100k preprocessing pipeline (reads data/raw, writes data/preprocessed)
+├── preprocess_1m.py         # 1M preprocessing pipeline (reads ml-1m, writes data/preprocessed_1m)
 ├── main.py                  # End-to-end execution and hybrid evaluation
 ├── .gitignore
 └── README.md
@@ -147,18 +145,20 @@ The exact same artifact schema is produced for both datasets (`data/preprocessed
 
 ## 7. Getting Started
 
+### 0) Prepare raw data
+Download from [GroupLens](https://grouplens.org/datasets/movielens/) and place the files as follows (raw data and generated results are not committed):
+- 100k: copy `u.data`, `u.item`, `u.user` into `data/raw/`
+- 1M: unzip `ml-1m.zip` so that `ml-1m/ratings.dat`, `movies.dat`, `users.dat` exist at the project root
+
 ### 1) Run Preprocessing (100k)
 ```bash
 python preprocess.py
-# or
-python data/preprocessing.py
 ```
+Outputs go to `data/preprocessed/`. If `data/raw/` does not exist, the script falls back to reading `data/ml-100k` and writing to `processed/`, so create `data/raw/` first to keep the paths used by the model code.
 
 ### 2) Run Preprocessing (1M Scale-Up)
 ```bash
 python preprocess_1m.py
-# or
-python data/preprocessing_1m.py
 ```
 
 Default paths: `--data_dir ml-1m`, `--out_dir data/preprocessed_1m`, `--plot_dir plots`.
