@@ -141,9 +141,13 @@ class TfidfContentBased:
 
 def plot_experiments(results):
     PLOT_DIR.mkdir(parents=True, exist_ok=True)
+    rmse = [r["val_rmse"] for r in results]
     fig, ax = plt.subplots(figsize=(10, 4))
-    ax.bar([r["name"] for r in results], [r["val_rmse"] for r in results])
+    bars = ax.bar([r["name"] for r in results], rmse)
     ax.set(ylabel="Validation RMSE", title="TF-IDF content-based comparison (lower is better)")
+    ax.set_ylim(min(rmse) - 0.005, max(rmse) + 0.005)
+    for bar, v in zip(bars, rmse):
+        ax.text(bar.get_x() + bar.get_width() / 2, v + 0.0005, f"{v:.5f}", ha="center")
     ax.tick_params(axis="x", labelrotation=25)
     fig.tight_layout()
     fig.savefig(PLOT_DIR / "cb_tfidf_validation_comparison.png", dpi=150)

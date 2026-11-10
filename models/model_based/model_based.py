@@ -149,8 +149,11 @@ def plot_experiments(results, best_model):
     names = [row["name"] for row in results]
     rmse = [row["val_rmse"] for row in results]
     fig, ax = plt.subplots(figsize=(9, 4))
-    ax.bar(names, rmse)
+    bars = ax.bar(names, rmse)
     ax.set(ylabel="Validation RMSE", title="Model comparison (lower is better)")
+    ax.set_ylim(min(rmse) - 0.005, max(rmse) + 0.005)
+    for bar, v in zip(bars, rmse):
+        ax.text(bar.get_x() + bar.get_width() / 2, v + 0.0005, f"{v:.5f}", ha="center")
     ax.tick_params(axis="x", labelrotation=20)
     fig.tight_layout()
     fig.savefig(PLOT_DIR / "validation_comparison.png", dpi=150)
